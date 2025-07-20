@@ -1,0 +1,81 @@
+<div class="admin-container">
+  <nav class="admin-nav">
+    <div class="nav-header">
+      <h2>Admin Console</h2>
+    </div>
+    <ul class="nav-menu">
+      <li><a [routerLink]="['/admin/dashboard']" routerLinkActive="active">Dashboard</a></li>
+      <li><a [routerLink]="['/admin/guests']" routerLinkActive="active">Guests</a></li>
+      <li><a [routerLink]="['/admin/invites']" routerLinkActive="active">Invites</a></li>
+    </ul>
+  </nav>
+
+  <main class="admin-content">
+    <div class="header-actions">
+      <h1>Edit Invite</h1>
+      <button class="btn btn-secondary" 
+        [routerLink]="['/admin/invites']">
+        Cancel
+      </button>
+    </div>
+
+    <div *ngIf="loading" class="loading-indicator">
+      <p>Loading invite details...</p>
+    </div>
+
+    <div *ngIf="error" class="error-message">
+      <p>{{ error }}</p>
+    </div>
+
+    <form [formGroup]="inviteForm" (ngSubmit)="onSubmit()" class="form" *ngIf="!loading">
+      <div class="form-group">
+        <label for="name">Invite Name:</label>
+        <input type="text" id="name" formControlName="name" class="form-control" />
+        <div class="error" *ngIf="formErrors.name">{{ formErrors.name }}</div>
+      </div>
+
+      <div class="form-group">
+        <label>Manage Guests:</label>
+        <div class="guest-selection">
+          <div class="available-guests">
+            <h3>Available Guests</h3>
+            <div class="search-box">
+              <input 
+                type="text" 
+                placeholder="Search guests..." 
+                class="form-control" 
+                [(ngModel)]="guestSearchTerm"
+                [ngModelOptions]="{standalone: true}"
+                (input)="filterAvailableGuests()">
+            </div>
+            <div class="guest-list">
+              <div *ngIf="loadingGuests" class="loading">Loading guests...</div>
+              <div *ngIf="availableGuests.length === 0 && !loadingGuests" class="no-guests">No available guests found</div>
+              <div *ngFor="let guest of filteredAvailableGuests" class="guest-item">
+                <span>{{ guest.firstName }} {{ guest.lastName }}</span>
+                <button type="button" class="btn btn-small" (click)="addGuest(guest)">Add</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="selected-guests">
+            <h3>Selected Guests</h3>
+            <div class="guest-list">
+              <div *ngIf="selectedGuests.length === 0" class="no-guests">No guests selected</div>
+              <div *ngFor="let guest of selectedGuests" class="guest-item">
+                <span>{{ guest.firstName }} {{ guest.lastName }}</span>
+                <button type="button" class="btn btn-small" (click)="removeGuest(guest)">Remove</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" [disabled]="inviteForm.invalid || isSubmitting">
+          Save Changes
+        </button>
+      </div>
+    </form>
+  </main>
+</div>

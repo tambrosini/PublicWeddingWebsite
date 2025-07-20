@@ -1,0 +1,124 @@
+<div class="rsvp-container">
+  <!-- Welcome Step -->
+  <div *ngIf="currentStep === 'welcome'" class="welcome-section">
+    <div class="welcome-content">
+      <h1>RSVP</h1>
+      <p>We're so excited to celebrate with you! Enter your invite code below to let us know if you're coming and if you have any dietary requirements.</p>
+      
+      <div class="invite-code-form">
+        <div class="form-group">
+          <label for="inviteCode">Invite Code</label>
+          <input 
+            type="text" 
+            id="inviteCode" 
+            [(ngModel)]="inviteCode" 
+            placeholder="Enter your unique invite code"
+            class="form-control"
+            [disabled]="loading"
+            (keyup.enter)="getInvite()"
+          />
+        </div>
+        
+        <div *ngIf="error" class="error-message">
+          <p>{{ error }}</p>
+        </div>
+        
+        <button 
+          type="button" 
+          class="btn btn-green" 
+          (click)="getInvite()"
+          [disabled]="loading || !inviteCode.trim()"
+        >
+          {{ loading ? 'Loading...' : 'Continue' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RSVP Form Step -->
+  <div *ngIf="currentStep === 'rsvp'" class="rsvp-section">
+    <div class="rsvp-content">
+      <div class="header-actions">
+        <h1>RSVP</h1>
+        <button class="btn btn-secondary" (click)="goBack()">Back</button>
+      </div>      
+      <div *ngIf="error" class="error-message">
+        <p>{{ error }}</p>
+      </div>
+
+      <form (ngSubmit)="submitRsvp()" class="rsvp-form">
+        <div *ngFor="let guest of guests; let i = index" class="guest-section">
+          <h3>{{ guest.firstName }} {{ guest.lastName }}</h3>
+            <div class="form-group">
+            <div class="row">
+              <div class="col-sm-3 col-12">
+                <label>Will you be attending?</label>
+                <div class="radio-group">
+                  <div class="radio-option">
+                    <input 
+                      type="radio" 
+                      id="attending_yes_{{i}}" 
+                      [value]="true"
+                      [(ngModel)]="guestRsvps[i].attending" 
+                      name="attending{{i}}"
+                      [disabled]="submitting"
+                    />
+                    <label for="attending_yes_{{i}}">Yes</label>
+                  </div>
+                  <div class="radio-option">
+                    <input 
+                      type="radio" 
+                      id="attending_no_{{i}}" 
+                      [value]="false"
+                      [(ngModel)]="guestRsvps[i].attending" 
+                      name="attending{{i}}"
+                      [disabled]="submitting"
+                    />
+                    <label for="attending_no_{{i}}">No</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-8 col-12">
+                <label for="diet{{i}}">Dietary Requirements</label>
+                <input 
+                  type="text" 
+                  id="diet{{i}}" 
+                  [(ngModel)]="guestRsvps[i].dietaryRequirements" 
+                  name="diet{{i}}"
+                  placeholder="e.g. Vegetarian, Nut Allergy, None"
+                  class="form-control"
+                  [disabled]="submitting"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="submit-section">
+          <button 
+            type="submit" 
+            class="btn btn-green"
+            [disabled]="submitting"
+          >
+            {{ submitting ? 'Submitting...' : 'Submit RSVP' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Thank You Step -->
+  <div *ngIf="currentStep === 'thankyou'" class="thankyou-section">
+    <div class="thankyou-content">
+      <h1>Thank You!</h1>
+      <p>We've received your RSVP response. We're so excited to celebrate with you!</p>
+      <p>If you need to make any changes, please contact us directly.</p>
+      
+      <button type="button" class="btn btn-green" (click)="goToInfo()">
+        Information
+      </button>
+      <button type="button" class="btn btn-green" (click)="goToFaq()">
+        FAQ
+      </button>
+    </div>
+  </div>
+</div>

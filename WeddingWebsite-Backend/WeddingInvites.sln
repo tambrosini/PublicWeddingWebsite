@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeddingInvites", "WeddingInvites\WeddingInvites.csproj", "{C14A052B-9B25-4641-BE73-3C4D81D9DF76}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeddingInvites.Test", "WeddingInvites.Test\WeddingInvites.Test.csproj", "{9BCA1D39-CC10-4499-ACE2-A48513473C62}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C14A052B-9B25-4641-BE73-3C4D81D9DF76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C14A052B-9B25-4641-BE73-3C4D81D9DF76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C14A052B-9B25-4641-BE73-3C4D81D9DF76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C14A052B-9B25-4641-BE73-3C4D81D9DF76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BCA1D39-CC10-4499-ACE2-A48513473C62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BCA1D39-CC10-4499-ACE2-A48513473C62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BCA1D39-CC10-4499-ACE2-A48513473C62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BCA1D39-CC10-4499-ACE2-A48513473C62}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

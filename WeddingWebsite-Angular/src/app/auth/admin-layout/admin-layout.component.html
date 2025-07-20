@@ -1,0 +1,20 @@
+<div class="admin-container">
+    <nav class="admin-nav">
+    <div class="nav-header">
+        <h2>Admin Console</h2>
+    </div>
+    <ul class="nav-menu">
+        <li><a routerLink="/admin/dashboard" routerLinkActive="active">Dashboard</a></li>
+        <li><a routerLink="/admin/guests" routerLinkActive="active">Guests</a></li>
+        <li><a routerLink="/admin/invites" routerLinkActive="active">Invites</a></li>
+    </ul>
+    <div class="user-info" *ngIf="currentUser">
+        <p>Logged in as: {{currentUser.email}}</p>
+        <button class="logout-btn" (click)="logout()">Logout</button>
+    </div>
+    </nav>
+    
+    <main class="admin-content">
+    <router-outlet></router-outlet>
+    </main>
+</div>

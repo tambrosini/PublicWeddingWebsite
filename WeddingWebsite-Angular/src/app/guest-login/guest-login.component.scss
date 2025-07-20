@@ -1,0 +1,35 @@
+/* You can add global styles to this file, and also import other style files */
+@use "../../styles/colours.scss";
+
+
+.login-container { 
+    text-align: center;
+    margin-top: 50px;
+    width: 30vw;
+}
+
+input { 
+    margin: 10px; 
+    padding: 5px; 
+}
+
+.error { 
+    color: red; 
+}
+
+.row {
+    margin-top: 50px;
+    text-align: center;
+}
+
+// Define your primary color
+$primary: colours.$palette-5; // Change this to your custom color
+
+.btn-primary {
+    background-color: colours.$palette-5 !important; // Your custom color
+    border-color: transparent !important;
+    
+    &:hover, &:focus, &:active {
+      background-color: colours.$palette-6 !important; // Slightly darker on hover
+    }
+}

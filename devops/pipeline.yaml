@@ -1,0 +1,35 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+resources:
+  containers:
+  - container: 'mssql'
+    image: 'mcr.microsoft.com/mssql/server:2019-latest'
+    ports:
+    - 1433:1433
+    env:
+      MSSQL_SA_PASSWORD: '$qlDevB0x'
+      ACCEPT_EULA: 'Y'
+
+variables:
+  ArtifactName: 'WeddingWebsite'
+  ArtifactPath: '$(Pipeline.Workspace)'
+  MigrationPath: 'WeddingWebsite-Backend/WeddingInvites'
+  TestPath: 'WeddingWebsite-Backend/WeddingInvites.Test'
+  AngularPath: 'WeddingWebsite-Angular'  
+
+stages:
+- template: build.yaml
+  parameters:
+    ArtifactName: '$(ArtifactName)'
+    ArtifactPath: '$(ArtifactPath)'
+    MigrationPath: '$(MigrationPath)'
+    TestPath: '$(TestPath)'
+
+- template: deploy.yaml
+  parameters:
+      ArtifactName: '$(ArtifactName)'
+      ArtifactPath: '$(ArtifactPath)'

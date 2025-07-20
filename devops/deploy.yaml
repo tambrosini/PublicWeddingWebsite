@@ -1,0 +1,52 @@
+parameters:
+- name: ArtifactName
+  type: string
+  default: ''
+- name: ArtifactPath
+  type: string
+  default: ''
+
+stages:
+- stage: Deploy
+  displayName: Deploy
+  dependsOn: Build
+  condition: succeeded()
+
+  jobs:
+  - deployment: Deployment
+    displayName: Deploy AppService and DB
+    pool:
+      vmImage: 'windows-latest'
+    environment: 'PROD'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: none
+
+          - download: current
+            artifact: '$(ArtifactName)'
+
+          - task: SqlAzureDacpacDeployment@1
+            displayName: 'Apply DB migrations'
+            inputs:
+              azureSubscription: '$(AppServiceSubscription)'
+              AuthenticationType: 'server'
+              ServerName: '$(ServerName)'
+              DatabaseName: '$(DatabaseName)'
+              SqlUsername: '$(SqlUsername)'
+              SqlPassword: '$(SqlPassword)'
+              deployType: 'SqlTask'
+              SqlFile: '${{ parameters.ArtifactPath }}/$(ArtifactName)/WeddingInvites.sql'
+              IpDetectionMethod: 'AutoDetect'
+
+          - task: AzureRmWebAppDeployment@5
+            displayName: 'Deploy to App Service'
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: '$(AppServiceSubscription)'
+              appType: 'webAppLinux'
+              WebAppName: '$(WebAppName)'
+              packageForLinux: '$(Pipeline.Workspace)/$(ArtifactName)/**/*.zip'
+              RuntimeStack: 'DOTNETCORE|8.0'
+              StartupCommand: 'dotnet /home/site/wwwroot/WeddingInvites.dll'

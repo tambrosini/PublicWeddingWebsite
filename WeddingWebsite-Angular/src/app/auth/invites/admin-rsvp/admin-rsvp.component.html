@@ -1,0 +1,56 @@
+<div class="admin-container">
+  <nav class="admin-nav">
+    <div class="nav-header">
+      <h2>Admin Console</h2>
+    </div>
+    <ul class="nav-menu">
+      <li><a [routerLink]="['/admin/dashboard']" routerLinkActive="active">Dashboard</a></li>
+      <li><a [routerLink]="['/admin/guests']" routerLinkActive="active">Guests</a></li>
+      <li><a [routerLink]="['/admin/invites']" routerLinkActive="active">Invites</a></li>
+    </ul>
+  </nav>
+
+
+  <main class="admin-content">
+    <div class="header-actions">
+      <h1>Admin RSVP</h1>
+      <div class="action-buttons">
+        <button class="btn btn-secondary" [routerLink]="['/admin/invites', invite?.id]">Back to Invite</button>
+      </div>
+    </div>
+
+    <div *ngIf="loading" class="loading-indicator">
+      <p>Loading invite and guests...</p>
+    </div>
+
+    <div *ngIf="error" class="error-message">
+      <p>{{ error }}</p>
+    </div>
+
+    <form *ngIf="invite && !loading" (ngSubmit)="submitRsvp()" class="rsvp-form">
+      <h2>RSVP for {{ invite.name }}</h2>
+
+      <div *ngFor="let guest of guests; let i = index" class="guest-section">
+        <hr />
+        <h3>{{ guest.firstName }} {{ guest.lastName }}</h3>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-2">
+              <label>
+                <input type="checkbox" [(ngModel)]="guestRsvps[i].attending" name="attending{{i}}" />
+                Attending
+              </label>
+            </div>
+            <div class="col-10">
+              <label for="diet{{i}}">Dietary Requirements</label>
+              <input type="text" id="diet{{i}}" [(ngModel)]="guestRsvps[i].dietaryRequirements" name="diet{{i}}"
+                placeholder="e.g. Vegetarian, Nut Allergy" class="form-control" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr />
+      <button type="submit" class="btn btn-primary">Submit RSVP</button>
+    </form>
+  </main>
+</div>

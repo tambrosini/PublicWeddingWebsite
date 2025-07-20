@@ -1,0 +1,8 @@
+<div class="row justify-content-center">
+    <div class="col-11 col-md-3 col-lg-3">
+        <h2>Enter Password</h2>
+    <input class="form-control" type="password" [(ngModel)]="password" placeholder="Enter password">
+    <button class="btn btn-primary" (click)="login()">Login</button>
+    <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+    </div>
+</div>

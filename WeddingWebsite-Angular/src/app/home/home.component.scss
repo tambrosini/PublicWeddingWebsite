@@ -1,0 +1,78 @@
+@use "../../styles/colours.scss";
+
+.holder {
+  width: 100%;
+  min-height: 100vh; /* Ensure it takes at least the full viewport height */
+}
+
+
+.image-container {
+  position: relative;
+  height: 400px; /* Fix the height to 400px */
+  overflow: hidden; /* Ensure anything beyond 400px is hidden */
+}
+
+.image-container img {
+  width: 100%;
+  height: auto;
+  object-fit: cover; /* Ensures the image fits nicely within the container */
+}
+
+.text-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: colours.$palette-2;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.7); /* Optional: Add a semi-transparent background */
+  padding: 10px;
+  border-radius: 10px; /* Rounds the corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds a shadow with some blur */
+}
+
+
+
+@media (max-width: 768px) {
+  .image-container {
+    height: 200px; /* Shorten the height for smaller screens */
+  }
+
+  .text-overlay {
+    font-size: 13px; /* Adjust font size for smaller screens */
+  }
+}
+
+.scroll-content {
+  // margin-top: 20px; /* Space between the image and the text below */
+  padding: 20px;
+  background-color: colours.$palette-2; /* Light background for contrast */
+  height: auto;
+}
+
+
+.col {
+  display: flex; /* Enable flexbox on the columns */
+  justify-content: center; /* Horizontally center the content */
+  align-items: center; /* Vertically center the content */
+  padding: 0; /* Optional: Remove extra padding for more control */
+}
+
+.portrait {
+  max-width: 100%;
+  height: auto; /* Ensure the image maintains its aspect ratio */
+}
+
+.justify-centre {
+  text-align: justify; /* Justify text to make it align properly */
+}
+
+/* Ensure the text in the left column is vertically stacked */
+.d-flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column; /* Stack the elements vertically */
+}
+

@@ -1,0 +1,6 @@
+@WeddingInvites_HostAddress = http://localhost:5101
+
+GET {{WeddingInvites_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

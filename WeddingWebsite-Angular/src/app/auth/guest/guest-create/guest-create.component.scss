@@ -1,0 +1,70 @@
+@use '../../admin-styling.scss';
+@use '../../../../styles/colours.scss';
+@use 'sass:color';
+
+// Enhanced form styling
+.form {
+  max-width: 600px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+// Form group hover effect
+.form-group {
+  transition: all 0.2s ease;
+  
+  &:focus-within {
+    transform: translateX(5px);
+  }
+}
+
+// Improved form controls with consistent colors
+.form-control {
+  transition: all 0.3s ease;
+  
+  &:focus {
+    border-color: colours.$palette-5;
+    box-shadow: 0 0 0 0.2rem rgba(colours.$palette-5, 0.25);
+  }
+}
+
+// Textarea enhancements
+textarea.form-control {
+  resize: vertical;
+  min-height: 80px;
+}
+
+// Submit button styling using app color scheme
+.btn-primary {
+  background-color: colours.$palette-5;
+  border-color: colours.$palette-5;
+  
+  &:hover:not(:disabled) {
+    background-color: color.adjust(colours.$palette-5, $lightness: -5%);
+    border-color: color.adjust(colours.$palette-5, $lightness: -5%);
+  }
+  
+  &:active {
+    background-color: color.adjust(colours.$palette-5, $lightness: -10%);
+    border-color: color.adjust(colours.$palette-5, $lightness: -10%);
+  }
+  
+  &:disabled {
+    background-color: color.adjust(colours.$palette-5, $lightness: 20%);
+    border-color: color.adjust(colours.$palette-5, $lightness: 20%);
+    cursor: not-allowed;
+  }
+}
+
+// Error message styling
+.error-message {
+  padding: 0.75rem;
+  margin-top: 1rem;
+  background-color: rgba(#dc3545, 0.1);
+  border-left: 4px solid #dc3545;
+  border-radius: 4px;
+  color: color.adjust(#dc3545, $lightness: -10%);
+}

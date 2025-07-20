@@ -1,0 +1,240 @@
+parameters:
+- name: ArtifactName
+  type: string
+  default: ''
+- name: ArtifactPath
+  type: string
+  default: ''
+- name: MigrationPath
+  type: string
+  default: ''
+- name: TestPath
+  type: string
+  default: ''
+- name: AngularPath
+  type: string
+  default: ''
+
+
+stages:
+- stage: Build
+  jobs:
+  - job: Build_Job
+    displayName: Build and Test
+    pool:
+      vmImage: ubuntu-latest
+    services:
+      mssql: mssql
+    variables:
+      RootPath: '$(Build.Repository.LocalPath)'
+      ConnectionString: 'Server=tcp:localhost,1433;Initial Catalog=WeddingInvites;User ID=sa;Password=$qlDevB0x;MultipleActiveResultSets=True;TrustServerCertificate=True'
+    workspace:
+      clean: all
+    steps:
+    - checkout: self
+      fetchDepth: 0
+
+    # Ensure bash scripts are executable
+    - bash: |
+        sudo chmod -R 777 $(Build.Repository.LocalPath)/devops
+      displayName: "Set devops script permissions"
+    
+    - task: NuGetToolInstaller@1
+      displayName: 'Install Nuget Tools'
+
+    - task: UseDotNet@2
+      displayName: 'Install .NET 8 SDK'
+      inputs:
+        version: 8.x
+        performMultiLevelLookup: true
+        includePreviewVersions: false
+    
+    - task: gitversion/setup@3
+      displayName: 'Install and setup GitVersion tool'
+      inputs:
+        versionSpec: '6.3.x'
+
+    - task: gitversion/execute@3
+      displayName: 'Set version number'
+
+    # Set EF Core version from the project file
+    - task: PowerShell@2
+      displayName: "Extract EF Core version"
+      inputs:
+        targetType: 'inline'
+        script: |
+          # Find the .csproj file in the migrations path
+          $csprojFile = Get-ChildItem -Path "$(MigrationPath)" -Filter "*.csproj" -File | Select-Object -First 1
+          
+          if ($csprojFile) {
+            Write-Host "Found project file: $($csprojFile.FullName)"
+            
+            # Read the csproj file
+            $projectContent = Get-Content -Path $csprojFile.FullName -Raw
+            
+            # Try to extract EF Core Tools version first
+            $versionMatch = [regex]::Match($projectContent, '<PackageReference\s+Include="Microsoft\.EntityFrameworkCore\.Tools"\s+Version="([^"]+)"')
+            
+            # If not found, try to extract EF Core version
+            if (!$versionMatch.Success) {
+                $versionMatch = [regex]::Match($projectContent, '<PackageReference\s+Include="Microsoft\.EntityFrameworkCore"\s+Version="([^"]+)"')
+            }
+            
+            if ($versionMatch.Success) {
+                $efCoreVersion = $versionMatch.Groups[1].Value
+                Write-Host "Found EF Core version: $efCoreVersion"
+                
+                # Set as a pipeline variable
+                Write-Host "##vso[task.setvariable variable=EfCoreVersion]$efCoreVersion"
+            } else {
+                Write-Host "##[warning]Could not find EF Core version in project file. Using default version."
+                Write-Host "##vso[task.setvariable variable=EfCoreVersion]6.0.0"
+            }
+          } else {
+            Write-Host "##[warning]No .csproj file found in $(MigrationPath). Using default EF Core version."
+            Write-Host "##vso[task.setvariable variable=EfCoreVersion]6.0.0"
+          }
+
+    - task: DotNetCoreCLI@2
+      displayName: "Create tool manifest"
+      inputs:
+        command: custom
+        custom: new
+        arguments: 'tool-manifest'
+
+    - task: DotNetCoreCLI@2
+      displayName: "Install dotnet-ef for EF Core"
+      inputs:
+        command: custom
+        custom: tool
+        arguments: 'install dotnet-ef --version $(EfCoreVersion)'
+      condition: succeeded()
+    
+    - task: DotNetCoreCLI@2
+      displayName: "Restore dotnet tools"
+      inputs:
+        command: custom
+        custom: tool
+        arguments: 'restore'
+
+    - task: PowerShell@2
+      displayName: "Install SqlPackage Tools"
+      inputs:
+        targetType: 'inline'
+        script: |
+          sudo apt-get install -y libunwind8 libicu70
+          wget -O sqlpackage-installer.zip https://aka.ms/sqlpackage-linux
+          mkdir -p /home/vsts/sqlpackage
+          unzip sqlpackage-installer.zip -d /home/vsts/sqlpackage
+          chmod +x /home/vsts/sqlpackage/sqlpackage
+
+    # Build the Solution  
+    - bash: |
+        dotnet build "$(RootPath)/WeddingWebsite-Backend/WeddingInvites.sln" -c Release
+      displayName: "Build Solution"
+      condition: succeeded()
+      workingDirectory: "$(Build.Repository.LocalPath)"
+
+    - bash: |
+        echo "Replacing connection string in appsettings.Testing.json"
+        sed -i 's|"DefaultConnection": *".*"|"DefaultConnection": "$(ConnectionString)"|' "$(RootPath)/$(MigrationPath)/appsettings.Testing.json"
+      displayName: "Patch connection string for tests"
+      condition: succeeded()
+      
+    # Restore Test DB from DACPAC
+    - bash: |
+        export PATH=$PATH:/home/vsts/sqlpackage
+        sqlpackage /a:Import /tcs:'$(ConnectionString)' /sf:'$(RootPath)/$(MigrationPath)/Database/WeddingWebsite.bacpac'
+      displayName: Restore Test database
+      condition: succeeded()
+      env:
+        ASPNETCORE_ENVIRONMENT: Testing
+        
+    # Apply any pending EF Core migrations to the test database
+    - bash: |
+        dotnet ef database update
+      displayName: Apply database migrations
+      condition: succeeded()
+      workingDirectory: '$(RootPath)/$(MigrationPath)'
+      env:
+        ASPNETCORE_ENVIRONMENT: Testing
+        
+    # Run .NET tests and generate testing report
+    - bash: |
+        dotnet test "$(TestPath)" --no-restore
+      displayName: Run .NET tests
+      condition: succeeded()
+      workingDirectory: '$(Build.Repository.LocalPath)'
+      continueOnError: false
+      env:
+        ASPNETCORE_ENVIRONMENT: Testing
+
+    # Replace the api connection string
+    - task: Bash@3
+      displayName: 'Update API URL in constants.ts'
+      inputs:
+        targetType: 'inline'
+        script: |
+          # Use sed to replace the URL in the constants.ts file
+          sed -i "s|export const ApiUrl = 'https://localhost:7001/api';|export const ApiUrl = '$(APP_URL)/api';|g" $(AngularPath)/src/app/constants.ts
+          
+          # Print the updated file for verification
+          echo "Updated constants.ts:"
+          cat $(AngularPath)/src/app/constants.ts
+
+
+    # Build the UI 
+    - bash: |
+        sudo $(Build.Repository.LocalPath)/devops/build-ui.sh '../$(MigrationPath)/wwwroot'
+      displayName: Build Angular UI
+      condition: succeeded()
+      workingDirectory: '$(AngularPath)'
+
+    # Publish the dotnet project 
+    - bash: |
+        dotnet publish "$(RootPath)/WeddingWebsite-Backend/WeddingInvites.sln" -c Release -o "${{ parameters.ArtifactPath }}/web-api/package"
+      displayName: Publish dotnet project
+      condition: succeeded()
+      workingDirectory: "$(Build.Repository.LocalPath)"
+
+    # Generate database scripts
+    - bash: |
+        dotnet ef migrations script -o ${{ parameters.ArtifactPath }}/database-scripts/WeddingInvites.sql --idempotent -v
+      displayName: Generate migration SQL script
+      workingDirectory: '$(RootPath)/$(MigrationPath)'
+      condition: succeeded()
+      env:
+        ConnectionStrings__DefaultConnection: $(DbConnectionString) 
+
+    # Zip up the web API for Azure remote deployment
+    - bash: |
+        cd ${{ parameters.ArtifactPath }}/web-api/package
+        zip -r WeddingWebsite.zip ./
+
+        echo $(ls)
+
+        mv WeddingWebsite.zip $(Build.Repository.LocalPath)/
+      displayName: Zip up API and front end build
+      workingDirectory: "$(Build.Repository.LocalPath)/"
+      condition: succeeded()
+
+      # Make deployment directory to assemble files for artifact publishing
+    - bash: mkdir deployment
+      displayName: Create deployment directory
+      workingDirectory: "$(Build.Repository.LocalPath)"
+      condition: succeeded()
+
+      #TODO SQL script
+      # Collate files for artifact generation
+    - bash: |
+        mv ./WeddingWebsite.zip deployment/
+        mv ${{ parameters.ArtifactPath }}/database-scripts/WeddingInvites.sql deployment/
+      displayName: Collate files for artifact generation
+      workingDirectory: "$(Build.Repository.LocalPath)"
+      condition: succeeded()
+
+      # Publish the artifact for deployment
+    - publish: $(Build.Repository.LocalPath)/deployment
+      displayName: Publish deployment artifact 
+      artifact: $(ArtifactName)
+      condition: succeeded()

@@ -1,0 +1,62 @@
+/* @use rules must come first */
+@use 'sass:color';
+@use "styles/colours.scss";
+
+/* Importing Bootstrap SCSS file */
+@use 'bootstrap/scss/bootstrap' as *;
+
+@import '@fortawesome/fontawesome-free/css/all.css';
+
+/* Make the entire page take full height */
+html, body {
+    height: 100%;
+    margin: 0;
+  }
+  
+  /* Set the body and app layout as flexbox */
+  app-root {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  /* Main content area (this will take up the remaining space) */
+  main {
+    flex: 1;
+    background-color: colours.$palette-2;
+  }
+  
+  /* Footer fixed at the bottom with specific height and padding */
+  footer {
+    background-color: colours.$palette-2; /* Optional background */
+    height: 40px;
+    padding: 8px 0; /* 8px padding on top and bottom */
+    text-align: center;
+    box-sizing: border-box; /* Ensure padding is included in the total height */
+  }
+
+// ===================
+// GLOBAL BUTTONS
+// ===================
+.btn-green {
+  @extend .btn-primary;
+  background-color: colours.$palette-5;
+  border-color: colours.$palette-5;
+
+  &:hover:not(:disabled) {
+    background-color: color.adjust(colours.$palette-5, $lightness: -5%);
+    border-color: color.adjust(colours.$palette-5, $lightness: -5%);
+  }
+
+  &:focus,
+  &.focus {
+    background-color: color.adjust(colours.$palette-5, $lightness: -5%);
+    border-color: color.adjust(colours.$palette-5, $lightness: -5%);
+    box-shadow: 0 0 0 0.2rem rgba(colours.$palette-5, 0.5);
+  }
+
+  &:disabled {
+    background-color: color.adjust(colours.$palette-5, $lightness: 10%);
+    border-color: color.adjust(colours.$palette-5, $lightness: 10%);
+  }
+}

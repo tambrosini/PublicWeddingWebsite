@@ -1,0 +1,91 @@
+@use '../../admin-styling.scss';
+@use '../../../../styles/colours.scss';
+
+// Enhanced detail card styling
+.detail-card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+}
+
+.detail-row {
+  display: flex;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #f2f2f2;
+  
+  &:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+}
+
+.detail-label {
+  font-weight: 600;
+  width: 180px;
+  color: #555;
+}
+
+.detail-value {
+  flex: 1;
+}
+
+// Enhance status indicators with a subtle transition
+.status-attending, 
+.status-declined, 
+.status-pending {
+  transition: all 0.2s ease;
+  
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.status-attending {
+  background-color: colours.$palette-5;
+}
+
+// Loading state styling
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  color: #555;
+  font-size: 1.1rem;
+  
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: colours.$palette-5;
+    animation: spin 1s ease-in-out infinite;
+    margin-right: 0.75rem;
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+// Button enhancements
+.btn-warning {
+  background-color: #ffc107;
+  color: #212529;
+  
+  &:hover:not(:disabled) {
+    background-color: #e0a800;
+  }
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+}

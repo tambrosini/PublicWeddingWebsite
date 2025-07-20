@@ -1,0 +1,67 @@
+<div class="admin-container" *ngIf="guest">
+  <nav class="admin-nav">
+    <div class="nav-header">
+      <h2>Admin Console</h2>
+    </div>
+    <ul class="nav-menu">
+      <li><a [routerLink]="['/admin/dashboard']" routerLinkActive="active">Dashboard</a></li>
+      <li><a [routerLink]="['/admin/guests']" routerLinkActive="active">Guests</a></li>
+      <li><a [routerLink]="['/admin/invites']" routerLinkActive="active">Invites</a></li>
+    </ul>
+  </nav>
+  <main class="admin-content">
+
+    <div class="header-actions">
+      <h1>Guest Details</h1>
+      <div class="action-buttons">
+        <button class="btn btn-warning mx-1" [routerLink]="['/admin/guests', guest.id, 'edit']">Edit</button>
+        <button class="btn btn-danger mx-1" (click)="deleteGuest()">Delete</button>
+        <button class="btn btn-secondary mx-1" routerLink="/admin/guests">Back to List</button>
+      </div>
+    </div>
+
+    <div class="detail-card">
+      <div class="detail-row">
+        <span class="detail-label">ID:</span>
+        <span class="detail-value">{{ guest.id }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">First Name:</span>
+        <span class="detail-value">{{ guest.firstName }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Last Name:</span>
+        <span class="detail-value">{{ guest.lastName }}</span>
+      </div>      <div class="detail-row">
+        <span class="detail-label">Attendance:</span>
+        <span class="detail-value" [ngClass]="{
+          'status-attending': guest.attending === true,
+          'status-declined': guest.attending === false,
+          'status-pending': guest.attending === null
+        }">
+          {{ guest.attending === true ? 'Attending' : 
+             guest.attending === false ? 'Declined' : 'Pending' }}
+        </span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Dietary Requirements:</span>
+        <span class="detail-value">{{ guest.dietaryRequirements || 'None' }}</span>
+      </div>
+      <div class="detail-row" *ngIf="guest.invite">
+        <span class="detail-label">Invite:</span>
+        <span class="detail-value">
+          <a [routerLink]="['/admin/invites', guest.inviteId]">View Invite Details</a>
+        </span>
+      </div>
+    </div>
+  </main>
+
+</div>
+
+<div class="loading" *ngIf="!guest && !error">
+  Loading guest details...
+</div>
+
+<div class="error-message" *ngIf="error">
+  {{ error }}
+</div>

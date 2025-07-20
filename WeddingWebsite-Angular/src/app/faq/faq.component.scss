@@ -1,0 +1,135 @@
+@use '../../styles/colours.scss';
+
+// .faq-page {
+//     background-color: colours.$palette-2;
+//     min-height: 100vh;
+//     padding-bottom: 2rem;
+// }
+
+.hero-section {
+    color: colours.$palette-6;
+    margin-bottom: 0;
+
+    h1 {
+        font-weight: 600;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .lead {
+        font-size: 1.25rem;
+        opacity: 0.9;
+    }
+}
+
+.info-section {
+    .card {
+        border: none;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+        .card-header {
+            border-bottom: none;
+            font-weight: 600;
+            padding: 1.25rem 1.5rem;
+            background-color: colours.$palette-6 !important;
+
+            h2,
+            h3 {
+                font-size: 1.5rem;
+                margin: 0;
+            }
+
+            i {
+                font-size: 1.2rem;
+            }
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+    }
+}
+
+.accordion {
+    //Turns off the shadow around the button when it is selected
+    --bs-accordion-btn-focus-box-shadow: 0 0 0 0.25rem rgba(52, 78, 65, 0);
+    --bs-accordion-btn-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='white'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    --bs-accordion-btn-active-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='white'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+        
+
+    .accordion-item {
+        border: none;
+        margin-bottom: 0.75rem;
+        border-radius: 8px;
+        overflow: hidden;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
+.accordion-button {
+    color: white;
+    background-color: colours.$palette-5;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    padding: 1rem 1.25rem;
+
+    &:not(.collapsed) {
+        color: white;
+        background-color: colours.$palette-4;
+        box-shadow: none;
+    }
+
+    &:focus {
+        border-color: colours.$palette-4;
+        box-shadow: 0 0 0 0.25rem rgba(52, 78, 65, 0.25);
+    }
+}
+
+.accordion-body {
+    color: colours.$palette-6;
+    padding: 1.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.alert {
+    border-radius: 10px;
+    border: none;
+
+    &.alert-info {
+        background-color: colours.$palette-1;
+        color: colours.$palette-6;
+        border-left: 4px solid colours.$palette-4;
+    }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 3rem 0 !important;
+
+        h1 {
+            font-size: 2.5rem;
+        }
+    }
+
+    .info-section .card {
+        margin-bottom: 1rem;
+    }
+}
+
+// Smooth scrolling for anchor links
+html {
+    scroll-behavior: smooth;
+}
+
+// Icon styling
+.fas,
+.far,
+.fab {
+    margin-right: 0.5rem;
+}

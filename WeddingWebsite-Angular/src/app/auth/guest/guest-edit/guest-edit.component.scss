@@ -1,0 +1,74 @@
+@use '../../admin-styling.scss';
+@use '../../../../styles/colours.scss';
+@use 'sass:color';
+
+// Enhanced form styling
+.form {
+  max-width: 600px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+  padding: 2rem;
+}
+
+// Improved form controls
+.form-control {
+  transition: all 0.3s ease;
+  
+  &:focus {
+    border-color: colours.$palette-5;
+    box-shadow: 0 0 0 0.2rem rgba(colours.$palette-5, 0.25);
+  }
+}
+
+// Select dropdown styling
+select.form-control {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 1.2em;
+  padding-right: 2rem;
+}
+
+// Loading indicator
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  color: #555;
+  font-size: 1.1rem;
+  
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: colours.$palette-5;
+    animation: spin 1s ease-in-out infinite;
+    margin-right: 0.75rem;
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+// Primary button styling
+.btn-primary {
+  background-color: colours.$palette-5;
+  border-color: colours.$palette-5;
+  
+  &:hover:not(:disabled) {
+    background-color: color.adjust(colours.$palette-5, $lightness: -5%);
+    border-color: color.adjust(colours.$palette-5, $lightness: -5%);
+  }
+  
+  &:active {
+    background-color: color.adjust(colours.$palette-5, $lightness: -10%);
+    border-color: color.adjust(colours.$palette-5, $lightness: -10%);
+  }
+}

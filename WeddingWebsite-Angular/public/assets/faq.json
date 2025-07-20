@@ -1,0 +1,50 @@
+[
+    {
+        "question": "Can I bring my children/baby?",
+        "answer": "We are only able to accommodate those guests formally invited. Thank you for understanding our wishes."
+    },
+    {
+        "question": "Can I bring a plus one?",
+        "answer": "We are only able to accommodate those guests formally invited. Thank you for understanding our wishes."
+    },    
+    {
+        "question": "Are there accommodation options nearby?",
+        "answer": "We have some recommended accommodation options listed on the info page <a href=\"/info\">here</a>. There are also plenty of Airbnb and other short-stay options in the area."
+    },
+    {
+        "question": "Gifts",
+        "answer": "We've covered this in our info page <a href=\"/info\">here</a>."
+    },    
+    {
+        "question": "Are there any colours I should avoid wearing?",
+        "answer": "Two simple guidelines: no white (you know this already) and please avoid the colours on our invitations. Everything else is fair game, so feel free to express your fabulous self."
+    },
+    {
+        "question": "Is the venue accessible?",
+        "answer": "Absolutely! Our venue is fully wheelchair accessible, so everyone can join the party comfortably. We've made sure there are no barriers to celebrating with us."
+    },    
+    {
+        "question": "Can my dietary requirements be accommodated?",
+        "answer": "Of course! We want everyone to enjoy every bite, so please mention any dietary requirements when you RSVP. Just remember - after the RSVP deadline, we can't guarantee accommodations since our venue needs advance notice to work their culinary wizardry. Early bird gets the perfectly prepared meal!"
+    },
+    {
+        "question": "Will the wedding be indoors or outdoors?",
+        "answer": "Fingers crossed for an outdoor ceremony, but we're prepared for whatever the weather throws at us! Our indoor alternative is just as beautiful, so don't stress about bringing rain gear. The reception will be indoors where we can celebrate no matter what's happening outside!"
+    },    
+    {
+        "question": "Is it okay to take pictures with our phones and cameras during the wedding?",
+        "answer": "Phones and cameras away during the ceremony please (during the reception is totally fine). We want to remind you that we prefer seeing your beautiful faces, not the backs of your devices. Our amazing photographer will capture all the magic - trust us, they're way better at this than any of us."
+    },
+    {
+        "question": "Is it okay to post photos on social media?",
+        "answer": "Emma has claimed first posting rights (totally fair, right?), so please wait until we've sat down for the reception to start sharing. Then it's open season, don't forget to tag us both and show the world what an epic party they're missing out on!"
+    },
+    {
+        "question": "What will the weather be this time of year?",
+        "answer": "Given the time of year there's a good chance we'll get a beautiful Scottish day. So prepare for cold and rain, but lets all remain optimistic for a fine day!"
+    },
+    {
+        "question": "My question isn't here, now what?",
+        "answer": "Give us a shout! We're always available for a chat and would rather sort out any questions now than have you confused on the day. Plus if it comes up more than once, we can update this page for others."
+    }
+]

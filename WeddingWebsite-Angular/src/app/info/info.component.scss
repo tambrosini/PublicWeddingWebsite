@@ -1,0 +1,190 @@
+@use '../../styles/colours.scss';
+
+.info-page {
+    background-color: colours.$palette-2;
+    min-height: 100vh;
+    padding-bottom: 2rem;
+}
+
+.hero-section {
+    
+    color: colours.$palette-6;
+    margin-bottom: 0;
+
+    h1 {
+        font-weight: 600;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .lead {
+        font-size: 1.25rem;
+        opacity: 0.9;
+    }
+}
+
+.info-section {
+    .card {
+        border: none;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+        .card-header {
+            border-bottom: none;
+            font-weight: 600;
+            padding: 1.25rem 1.5rem;
+
+            background-color: colours.$palette-6 !important;
+
+            h2,
+            h3 {
+                font-size: 1.5rem;
+                margin: 0;
+            }
+
+            i {
+                font-size: 1.2rem;
+            }
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+    }
+}
+
+.deadline-box {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef) !important;
+    border: 2px solid colours.$palette-3;
+    border-radius: 10px;
+
+    .fs-3 {
+        color: colours.$palette-6 !important;
+    }
+}
+
+.gift-box {
+    background: linear-gradient(135deg, #fff, #f8f9fa);
+    border: 2px solid colours.$palette-3 !important;
+    border-radius: 15px;
+
+    i {
+        color: colours.$palette-4 !important;
+    }
+}
+
+.btn {
+    border-radius: 25px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+
+    &.btn-primary {
+        background-color: colours.$palette-4;
+        border-color: colours.$palette-4;
+
+        &:hover {
+            background-color: colours.$palette-5;
+            border-color: colours.$palette-5;
+            transform: translateY(-2px);
+            color: white;
+        }
+    }
+
+    &.btn-outline-primary {
+        color: colours.$palette-4;
+        border-color: colours.$palette-4;
+
+        &:hover {
+            background-color: colours.$palette-4;
+            border-color: colours.$palette-4;
+            color: white;
+        }
+    }
+
+    &.btn-lg {
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+    }
+}
+
+.alert {
+    border-radius: 10px;
+    border: none;
+
+    &.alert-info {
+        background-color: colours.$palette-1;
+        color: colours.$palette-6;
+        border-left: 4px solid colours.$palette-4;
+    }
+
+    &.alert-warning {
+        background-color: #fff3cd;
+        color: #856404;
+        border-left: 4px solid #ffc107;
+    }
+}
+
+.text-primary {
+    color: colours.$palette-4 !important;
+}
+
+.text-success {
+    color: colours.$palette-5 !important;
+}
+
+.bg-light {
+    background-color: #f8f9fa !important;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 3rem 0 !important;
+
+        h1 {
+            font-size: 2.5rem;
+        }
+    }
+
+    .info-section .card {
+        margin-bottom: 1rem;
+    }
+
+    .deadline-box {
+        margin-top: 1rem;
+    }
+}
+
+// Smooth scrolling for anchor links
+html {
+    scroll-behavior: smooth;
+}
+
+// Custom list styling
+.list-unstyled li {
+    margin-bottom: 0.5rem;
+
+    i {
+        width: 20px;
+    }
+}
+
+// Icon styling
+.fas,
+.far,
+.fab {
+    margin-right: 0.5rem;
+}
+
+// Card hover effects
+.card {
+    .card-body {
+
+        h5,
+        h6 {
+            color: colours.$palette-6;
+            margin-bottom: 1rem;
+        }
+    }
+}

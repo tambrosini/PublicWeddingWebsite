@@ -1,0 +1,62 @@
+<div class="admin-container">
+    <nav class="admin-nav">
+        <div class="nav-header">
+            <h2>Admin Console</h2>
+        </div>
+        <ul class="nav-menu">
+            <li><a [routerLink]="['/admin/dashboard']" routerLinkActive="active">Dashboard</a></li>
+            <li><a [routerLink]="['/admin/guests']" routerLinkActive="active">Guests</a></li>
+            <li><a [routerLink]="['/admin/invites']" routerLinkActive="active">Invites</a></li>
+        </ul>
+    </nav>
+
+    <main class="admin-content">
+        <div class="header-actions">
+            <h1>Invite Management</h1>
+            <button class="btn btn-green" [routerLink]="['/admin/invites/create']">Add New Invite</button>
+        </div>
+
+        <div class="search-filter">
+            <input type="text" placeholder="Search invites..." [(ngModel)]="searchTerm" (input)="filterInvites()"
+                class="search-input" />
+        </div>
+
+        <div class="table-container">
+            <table class="data-table data-table-invites">
+                <thead>
+                    <tr>
+                        <th>Invite Name</th>
+                        <th>Guest Count</th>
+                        <th>Rsvp Completed</th>
+                        <th class="actions">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let invite of filteredInvites">
+                        <td>{{ invite.name }}</td>
+                        <td>{{ invite.guests.$values.length }}</td>
+                        <td>
+                            <span [ngClass]="invite.rsvpCompleted ? 'status-completed' : 'status-pending'">
+                                {{ invite.rsvpCompleted ? 'Completed' : 'Pending' }}
+                            </span>
+                        </td>
+                        <td class="actions">
+                            <button class="btn btn-secondary mx-1"
+                                [routerLink]="['/admin/invites', invite.id]">View</button>
+                            <button class="btn btn-secondary mx-1"
+                                [routerLink]="['/admin/invites', invite.id, 'edit']">Edit</button>
+                            <button class="btn btn-danger mx-1" (click)="deleteInvite(invite.id)">Delete</button>
+                            <button class="btn btn-green" [routerLink]="['/admin/invites', invite.id, 'rsvp']" [disabled]="invite.rsvpCompleted"> 
+                                Admin RSVP
+                            </button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="filteredInvites.length === 0">
+                        <td colspan="6" class="no-data">No invites found</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+</div>

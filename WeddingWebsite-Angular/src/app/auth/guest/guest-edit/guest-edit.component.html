@@ -1,0 +1,57 @@
+<div class="admin-container">
+  <nav class="admin-nav">
+    <div class="nav-header">
+      <h2>Admin Console</h2>
+    </div>
+    <ul class="nav-menu">
+      <li><a [routerLink]="['/admin/dashboard']" routerLinkActive="active">Dashboard</a></li>
+      <li><a [routerLink]="['/admin/guests']" routerLinkActive="active">Guests</a></li>
+      <li><a [routerLink]="['/admin/invites']" routerLinkActive="active">Invites</a></li>
+    </ul>
+  </nav>
+  
+  <main class="admin-content">
+    <div class="header-actions">
+      <h1>Edit Guest</h1>
+      <button class="btn btn-secondary" [routerLink]="['/admin/guests', guestId]">Cancel</button>
+    </div>
+
+    <div class="loading" *ngIf="!guestForm && !error">
+      Loading guest details...
+    </div>
+
+    <form *ngIf="guestForm" [formGroup]="guestForm" (ngSubmit)="onSubmit()" class="form">
+      <div class="form-group">
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" formControlName="firstName" class="form-control" />
+        <div class="error" *ngIf="formErrors.firstName">{{ formErrors.firstName }}</div>
+      </div>
+
+      <div class="form-group">
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" formControlName="lastName" class="form-control" />
+        <div class="error" *ngIf="formErrors.lastName">{{ formErrors.lastName }}</div>
+      </div>
+
+      <div class="form-group">
+        <label for="dietaryRequirements">Dietary Requirements:</label>
+        <textarea id="dietaryRequirements" formControlName="dietaryRequirements" class="form-control" rows="3"></textarea>
+      </div>      <div class="form-group">
+        <label for="attending">Attendance:</label>
+        <select id="attending" formControlName="attending" class="form-control">
+          <option [ngValue]="true">Attending</option>
+          <option [ngValue]="false">Not Attending</option>
+          <option [ngValue]="null">Pending</option>
+        </select>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" [disabled]="guestForm.invalid || isSubmitting">Save Changes</button>
+      </div>
+    </form>
+
+    <div class="error-message" *ngIf="error">
+      {{ error }}
+    </div>
+  </main>
+</div>

@@ -1,0 +1,57 @@
+<div class="admin-container">
+  <nav class="admin-nav">
+    <div class="nav-header">
+      <h2>Admin Console</h2>
+    </div>
+    <ul class="nav-menu">
+      <li><a [routerLink]="['/admin/dashboard']" routerLinkActive="active">Dashboard</a></li>
+      <li><a [routerLink]="['/admin/guests']" routerLinkActive="active">Guests</a></li>
+      <li><a [routerLink]="['/admin/invites']" routerLinkActive="active">Invites</a></li>
+    </ul>
+    <div class="user-info" *ngIf="currentUser">
+      <p>Logged in as: {{currentUser.email}}</p>
+      <button class="logout-btn" (click)="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <main class="admin-content">
+    <div class="header-section">
+      <h1>Admin Dashboard</h1> 
+      <button class="btn btn-green download-btn" (click)="downloadRsvpReport()">
+        <span>Download RSVP Report</span>
+      </button>
+    </div>
+
+    <div class="dashboard-stats">
+      <div class="stat-card">
+        <h3>Total Guests</h3>
+        <p class="stat-number">{{dashboard?.totalGuests}}</p>
+      </div>
+      <div class="stat-card">
+        <h3>Accepted</h3>
+        <p class="stat-number">{{dashboard?.acceptedGuests}}</p>
+      </div>
+      <div class="stat-card">
+        <h3>Declined</h3>
+        <p class="stat-number">{{dashboard?.declinedGuests}}</p>
+      </div>
+      <div class="stat-card">
+        <h3>Pending</h3>
+        <p class="stat-number">{{dashboard?.pendingGuests}}</p>
+      </div>
+    </div>
+
+    <div class="recent-activity">
+      <div *ngIf="eventLogs?.length">
+        <div *ngFor="let log of eventLogs">
+          <div class="m-1 border-bottom" style="display: flex; justify-content: space-between;">
+            <span>{{ log.text }}</span><span>{{ log.time }}</span>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!eventLogs?.length">
+        <p>No recent activity.</p>
+      </div>
+    </div>
+  </main>
+</div>

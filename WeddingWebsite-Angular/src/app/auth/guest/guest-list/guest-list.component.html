@@ -1,0 +1,65 @@
+<div class="admin-container">
+    <nav class="admin-nav">
+        <div class="nav-header">
+            <h2>Admin Console</h2>
+        </div>
+        <ul class="nav-menu">
+            <li><a [routerLink]="['/admin/dashboard']" routerLinkActive="active">Dashboard</a></li>
+            <li><a [routerLink]="['/admin/guests']" routerLinkActive="active">Guests</a></li>
+            <li><a [routerLink]="['/admin/invites']" routerLinkActive="active">Invites</a></li>
+        </ul>
+    </nav>
+
+    <main class="admin-content">
+        <div class="header-actions">
+            <h1>Guest Management</h1>
+            <button class="btn btn-green" [routerLink]="['/admin/guests/create']">Add New Guest</button>
+        </div>
+
+        <div class="search-filter">
+            <input type="text" placeholder="Search guests..." [(ngModel)]="searchTerm" (input)="filterGuests()"
+                class="search-input" />
+        </div>
+
+        <div class="table-container">
+            <table class="data-table data-table-guests">
+                <thead>
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Attendance</th>
+                        <th>Dietary Requirements</th>
+                        <th class="actions">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let guest of filteredGuests">
+                        <td>{{ guest.firstName }}</td>
+                        <td>{{ guest.lastName }}</td>                        <td>
+                            <span [ngClass]="{
+                                'status-attending': guest.attending === true,
+                                'status-declined': guest.attending === false,
+                                'status-pending': guest.attending === null
+                            }">
+                                {{ guest.attending === true ? 'Attending' : 
+                                   guest.attending === false ? 'Declined' : 'Pending' }}
+                            </span>
+                        </td>
+                        <td>{{ guest.dietaryRequirements || 'None' }}</td>
+                        <td class="actions">
+                            <button class="btn btn-secondary mx-1"
+                                [routerLink]="['/admin/guests', guest.id]">View</button>
+                            <button class="btn btn-secondary mx-1"
+                                [routerLink]="['/admin/guests', guest.id, 'edit']">Edit</button>
+                            <button class="btn btn-danger mx-1" (click)="deleteGuest(guest.id)">Delete</button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="filteredGuests.length === 0">
+                        <td colspan="6" class="no-data">No guests found</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+</div>

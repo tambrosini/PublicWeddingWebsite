@@ -1,0 +1,57 @@
+@use "../../styles/colours.scss";
+
+.navbar {
+  background-color: colours.$palette-6 !important;
+
+  .navbar-nav .nav-link {
+    color: colours.$palette-2 !important;
+  }
+
+  .navbar-brand {
+    color: colours.$palette-2 !important;
+  }
+
+  // Custom burger "icon" in pallete grey
+  .navbar-toggler {
+    outline: none; // Removes the default focus outline
+
+    &:focus {
+      box-shadow: none; // Removes the focus box-shadow
+    }
+
+    padding: 0.25em 0.75em;
+  }
+
+  .navbar-toggler-icon {
+    background-image: none; // Remove the default icon
+    position: relative;
+    width: 1.5em;
+    height: 1em;
+    display: inline-block;
+
+    &::before,
+    &::after,
+    span {
+      content: '';
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 0.2em;
+      background-color: colours.$palette-2 !important; // Your custom color
+      transition: background-color 0.3s ease;
+    }
+
+    &::before {
+      top: 0;
+    }
+
+    span {
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    &::after {
+      bottom: 0;
+    }
+  }
+}
