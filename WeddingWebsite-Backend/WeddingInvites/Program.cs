@@ -20,8 +20,25 @@ builder.Services.Configure<SeedUserOptions>(configuration.GetSection("AdminUser"
 
 
 // Entity Framework
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+
+var databaseType = configuration.GetSection("DatabaseType").Value!;
+
+if (databaseType == "sqlserver")
+{
+    Console.WriteLine("Using SQL Server database");
+    var connectionString = configuration.GetConnectionString("DefaultConnection")!;
+    
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseSqlServer(connectionString));
+}
+else if (databaseType == "postgres")
+{
+    Console.WriteLine("Using Postgres database");
+    var connectionString = configuration.GetConnectionString("PostgresConnection")!;
+    
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseNpgsql(connectionString));
+}
 
 //Identity
 builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
