@@ -20,8 +20,8 @@ public class UpdateTests : IClassFixture<BaseFixture<Guest>>
         {
             ToUpdate = new Guest
             {
-                FirstName = "Thomas",
-                LastName = "Ambrosini",
+                FirstName = "John",
+                LastName = "Wick",
                 Attending = false
             };
 
@@ -57,8 +57,8 @@ public class UpdateTests : IClassFixture<BaseFixture<Guest>>
         
         var failureModel = new Guest
         {
-            FirstName = "Sophie",
-            LastName = "Anderson",
+            FirstName = "Jessica",
+            LastName = "Brown",
             Id = 9999999,
         };
 
@@ -72,8 +72,8 @@ public class UpdateTests : IClassFixture<BaseFixture<Guest>>
         
         var failureModel = new Guest
         {
-            FirstName = "Sophie",
-            LastName = "Anderson",
+            FirstName = "Jessica",
+            LastName = "Brown",
             Id = ToUpdate.Id,
             InviteId = 9999999,
         };

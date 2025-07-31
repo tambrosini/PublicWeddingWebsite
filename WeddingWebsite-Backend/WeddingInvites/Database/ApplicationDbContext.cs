@@ -1,5 +1,4 @@
-﻿using Mailjet.Client.Resources;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WeddingInvites.Domain;
 
@@ -18,7 +17,7 @@ public class ApplicationDbContext : IdentityDbContext
     
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.HasDefaultSchema("dbo");
+        builder.HasDefaultSchema("wedding");
         
         ConfigureBaseProperties<Guest>(builder);
         ConfigureBaseProperties<Invite>(builder);
@@ -49,7 +48,10 @@ public class ApplicationDbContext : IdentityDbContext
 
         entity.HasKey(x => x.Id);
         entity.ToTable(typeof(TEntity).Name);
-        entity.Property(x => x.RowVersion).IsRowVersion();
+        entity.Property(x => x.RowVersion).IsRowVersion().IsConcurrencyToken();
+        
+        entity.Property(x => x.Id)
+            .ValueGeneratedOnAdd();
     }
     
 }

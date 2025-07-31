@@ -1,0 +1,103 @@
+parameters:
+- name: ArtifactName
+  type: string
+  default: ''
+- name: ArtifactPath
+  type: string
+  default: ''
+
+stages:
+- stage: Deploy
+  displayName: Deploy to PostgreSQL/Supabase
+  dependsOn: Build
+  condition: succeeded()
+
+  jobs:
+  - deployment: Deployment
+    displayName: Deploy App Service with PostgreSQL
+    pool:
+      vmImage: 'ubuntu-latest'
+    environment: 'PROD-POSTGRES'
+    variables:
+      # These can be overridden in Azure Portal pipeline variables
+      - name: PostgresConnectionString
+        value: '$(POSTGRES_CONNECTION_STRING)'
+      - name: DatabaseType
+        value: 'postgres'
+      - name: AppServiceSubscription
+        value: '$(AZURE_SUBSCRIPTION)'
+      - name: WebAppName
+        value: '$(WEB_APP_NAME)'
+      - name: SupabaseUrl
+        value: '$(SUPABASE_URL)'
+      - name: SupabaseKey
+        value: '$(SUPABASE_ANON_KEY)'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: none
+
+          - download: current
+            artifact: '$(ArtifactName)'
+
+          # Install PostgreSQL client tools for running migrations
+          - bash: |
+              sudo apt-get update
+              sudo apt-get install -y postgresql-client
+            displayName: 'Install PostgreSQL client tools'
+
+          # Install .NET SDK for running EF migrations
+          - task: UseDotNet@2
+            displayName: 'Install .NET 8 SDK'
+            inputs:
+              version: 8.x
+              performMultiLevelLookup: true
+              includePreviewVersions: false
+
+          # Run PostgreSQL migrations using the generated SQL script
+          - bash: |
+              echo "=== Running PostgreSQL Migrations ==="
+              
+              if [ ! -z "$(PostgresConnectionString)" ]; then
+                echo "Found PostgreSQL connection string, proceeding with migration..."
+                
+                # Check if migration script exists
+                MIGRATION_SCRIPT="${{ parameters.ArtifactPath }}/$(ArtifactName)/WeddingInvites-postgres.sql"
+                if [ -f "$MIGRATION_SCRIPT" ]; then
+                  echo "Migration script found at: $MIGRATION_SCRIPT"
+                  echo "Running migrations against PostgreSQL database..."
+                  
+                  # Run the migration script using psql
+                  psql "$(PostgresConnectionString)" -f "$MIGRATION_SCRIPT" -v ON_ERROR_STOP=1
+                  
+                  if [ $? -eq 0 ]; then
+                    echo "✅ Database migrations completed successfully!"
+                  else
+                    echo "❌ Database migration failed!"
+                    exit 1
+                  fi
+                else
+                  echo "❌ Migration script not found at: $MIGRATION_SCRIPT"
+                  exit 1
+                fi
+              else
+                echo "❌ PostgreSQL connection string not provided. Cannot run migrations."
+                echo "Please ensure POSTGRES_CONNECTION_STRING variable is set."
+                exit 1
+              fi
+              
+              echo "=========================================="
+            displayName: 'Run PostgreSQL Migrations'
+
+          # Deploy to Azure App Service (Application only - no configuration)
+          - task: AzureRmWebAppDeployment@5
+            displayName: 'Deploy to App Service (PostgreSQL)'
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: '$(AppServiceSubscription)'
+              appType: 'webAppLinux'
+              WebAppName: '$(WebAppName)'
+              packageForLinux: '$(Pipeline.Workspace)/$(ArtifactName)/**/*postgres*.zip'
+              RuntimeStack: 'DOTNETCORE|8.0'
+              StartupCommand: 'dotnet /home/site/wwwroot/WeddingInvites.dll'
