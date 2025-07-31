@@ -1,0 +1,33 @@
+# Node.js
+WeddingWebsite-Angular/node_modules/
+WeddingWebsite-Angular/dist/
+WeddingWebsite-Angular/.angular/
+
+# .NET
+WeddingWebsite-Backend/WeddingInvites/bin/
+WeddingWebsite-Backend/WeddingInvites/obj/
+WeddingWebsite-Backend/WeddingInvites.Test/bin/
+WeddingWebsite-Backend/WeddingInvites.Test/obj/
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Documentation
+documentation/
+README.md
+
+# DevOps (not needed in container)
+devops/

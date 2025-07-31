@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  wedding-website:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - DatabaseType=postgres
+      - ConnectionStrings__PostgresConnection=Host=localhost;Port=5432;Database=WeddingInvites;Username=postgres;Password=Password01!
+      - AllowedHosts=*
+      - Cors__AllowedOrigins__0=http://localhost:8080
+      - Cors__AllowedOrigins__1=https://localhost:8080
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

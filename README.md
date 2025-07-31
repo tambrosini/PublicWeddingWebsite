@@ -95,6 +95,58 @@ PublicWeddingWebsite/
 - PostgreSQL or SQL Server
 - Visual Studio Code or preferred IDE
 
+### Docker Deployment (Recommended)
+
+The easiest way to run the application is using Docker, which bundles everything into a single container including the Angular frontend, .NET backend, and PostgreSQL database.
+
+#### Build the Container
+
+```bash
+docker build -t wedding-website:latest .
+```
+
+#### Run the Application
+
+```bash
+# Run in background (detached mode)
+docker run -d -p 8080:80 --name wedding-test wedding-website:latest
+
+# Or run in foreground to see logs
+docker run -p 8080:80 wedding-website:latest
+```
+
+The application will be available at `http://localhost:8080`
+
+#### Container Features
+
+- **Complete Stack**: Angular frontend, .NET 8 backend, and PostgreSQL database in one container
+- **Automatic Setup**: Database initialization and Entity Framework migrations run automatically
+- **Production Ready**: Optimized build with proper authentication and CORS configuration
+- **Volume Support**: Use Docker Compose for persistent data storage
+
+#### Docker Management Commands
+
+```bash
+# View running containers
+docker ps
+
+# View container logs
+docker logs wedding-test
+
+# Stop the container
+docker stop wedding-test
+
+# Remove the container
+docker rm wedding-test
+
+# Access container shell (for debugging)
+docker exec -it wedding-test /bin/bash
+```
+
+### Manual Development Setup
+
+For local development without Docker:
+
 ### Database Setup
 
 1. **Choose your database provider** by updating `appsettings.json`:
@@ -231,12 +283,35 @@ npm test
 
 ## 🚀 Deployment
 
-The project includes Azure DevOps pipeline configurations for automated deployment:
+### Docker Containerized Deployment (Recommended)
+
+The simplest deployment method is using the Docker container which includes the complete application stack:
+
+```bash
+# Build the container
+docker build -t wedding-website:latest .
+
+# Deploy using Docker Compose (recommended for production)
+docker run -d -p 8080:80 --name wedding-app wedding-website:latest
+```
+
+**Production Considerations:**
+
+- Use Docker Compose with volumes for data persistence
+- Configure reverse proxy (nginx) for HTTPS
+- Set up monitoring and logging
+- Use Docker secrets for sensitive configuration
+
+### Azure DevOps Pipelines
+
+The project also includes Azure DevOps pipeline configurations for automated deployment:
 
 - **PostgreSQL**: `devops/PostgreSQL/pipeline-postgres.yaml`
 - **Azure SQL**: `devops/AzureSql/pipeline.yaml`
 
-### Production Build
+### Manual Production Build
+
+For traditional deployment without Docker:
 
 Build the application for production:
 
